@@ -11,14 +11,16 @@ require_once ROOT . '/vendor/autoload.php';
 require_once HELPERS . '/helpers.php';
 
 $app = new PHPFramework\Application();
-dump($app);
-dump(app());
+require_once CONFIG . '/routes.php';
+$app->run();
 
-dump(request()->getMethod());
-dump(request()->isGet());
-dump(request()->isPost());
-dump(request()->isAjax());
-dump(request()->get('page'));
-dump($_GET);
+// dump($app);
+// dump(app());
+// dump(request()->getMethod());
+// dump(request()->isGet());
+// dump(request()->isPost());
+// dump(request()->isAjax());
+// dump(request()->get('page'));
+// dump($_GET);
 
 dump("Time: " . microtime(true) - $start_framework);
