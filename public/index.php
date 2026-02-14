@@ -14,6 +14,7 @@ $app = new PHPFramework\Application();
 require_once CONFIG . '/routes.php';
 $app->run();
 
+
 // dump($app);
 // dump(app());
 // dump(request()->getMethod());
