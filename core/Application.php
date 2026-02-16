@@ -8,6 +8,7 @@ class Application
     public Request $request;
     public Response $response;
     public Router $router;
+    public View $view;
     public static Application $app;
 
     public function __construct()
@@ -18,7 +19,7 @@ class Application
         $this->request = new Request($this->uri);
         $this->response = new Response();
         $this->router = new Router($this->request, $this->response);
-        // var_dump($this->uri);
+        $this->view = new View(LAYOUT);
     }
 
     public function run():void
