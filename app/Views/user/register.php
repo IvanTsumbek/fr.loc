@@ -4,8 +4,11 @@
 
   <div class="row">
 
-    <div col-md-6 class="offset-md-3">
+    <div class="col-md-6 offset-md-3">
+
       <form action="<?= base_url('/register') ?>" method="post">
+
+        <?= get_csrf_field() ?>
 
         <div class="mb-3">
           <label for="name" class="form-label">Name</label>

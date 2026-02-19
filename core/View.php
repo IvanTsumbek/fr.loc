@@ -26,7 +26,7 @@ class View
         }
 
         if (false === $layout) {
-            return $this->content;
+            return $content;
         }
 
         $layout_file_name = $layout ?: $this->layout;
