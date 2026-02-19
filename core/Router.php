@@ -77,6 +77,7 @@ class Router
                 preg_match("#^{$route['path']}$#", "/{$path}", $matches) &&
                 in_array($this->request->getMethod(), $route['method'])
             ) {
+                // dump(__FILE__ . __LINE__, $matches);
                 foreach ($matches as $k => $v) {
                     if (is_string($k)) {
                         $this->route_params[$k] = $v;
