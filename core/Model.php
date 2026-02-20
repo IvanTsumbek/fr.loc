@@ -4,18 +4,28 @@ namespace PHPFramework;
 
 use Valitron\Validator;
 
-class Model
+abstract class Model extends \Illuminate\Database\Eloquent\Model
 {
-    protected array $fillable = ['name', 'email'];
-    public array $attributes = [];
+    protected $fillable = ['name', 'email'];
+    public $attributes = [];
     protected array $rules = [];
     protected array $labels = [];
     protected array $errors = [];
 
+    public function save(array $options = [])
+    {
+        foreach($this->attributes as $k => $v) {
+            if (!in_array($k, $this->fillable)) {
+                unset($this->attributes[$k]);
+            }
+        }
+        return parent::save($options);
+    }
+
     public function loadData():void
     {
         $data = request()->getData();
-        foreach ($this->fillable as $field) {
+        foreach ($this->loaded as $field) {
             if (isset($data[$field])) {
                 $this->attributes[$field] = $data[$field];
             } else {

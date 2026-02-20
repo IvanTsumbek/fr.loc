@@ -10,3 +10,14 @@ const CORE = ROOT . "/core";
 const VIEWS = APP . "/Views";
 const LAYOUT = 'default';
 const PATH = 'https://fr.loc';
+const DB_SETTINGS = [
+    'driver' => 'mysql',
+    'host' => '127.127.126.31',
+    'database' => 'fr_loc',
+    'username' => 'root',
+    'password' => '',
+    'charset' => 'utf8mb4',
+    'collation' => 'utf8mb4_unicode_ci',
+    'port' => '3306',
+    'prefix' => '',
+];

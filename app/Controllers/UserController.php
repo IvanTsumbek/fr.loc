@@ -3,13 +3,29 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 class UserController extends BaseController
 {
     public function register()
     {
+        // dump(Capsule::insert("insert into users (name, email, password) values (?, ?, ?)", 
+        // ['Ivab', 'ivan@mail.ru', 123]));
+
+        $users = Capsule::table('users')->select(['id', 'name'])->get();
+        // dump($users);
+
+        // $users = Capsule::select('select * from users where id = ?', [2]);
+        // dump($users);
+        
+        $users2 = User::all();
+        foreach ($users2 as $user) {
+            echo "$user->name, ";
+        }
+
         return view('user/register', [
             'title' => 'Register page',
+            'users' =>  $users,
         ]);
     }
 
@@ -17,14 +33,22 @@ class UserController extends BaseController
     {
         $model = new User();
         $model->loadData();
-        if(!$model->validate()) {
+        if (!$model->validate()) {
             session()->setFlash('error', 'Validation errors');
             session()->set('form_errors', $model->getErrors());
             session()->set('form_data', $model->attributes);
         } else {
-            // session()->setFlash('info', 'Info message...');
-            session()->setFlash('success', 'Successfully validation');
-
+            // User::query()->create([
+            //     'name' => $model->attributes['name'],
+            //     'email' => $model->attributes['email'],
+            //     'password' => $model->attributes['password']
+            // ]);
+            // unset($model->attributes['confirmPassword']);
+            if ($model->save()) {
+                session()->setFlash('success', 'Thanks for registration');
+            } else {
+                session()->setFlash('error', 'Error registration');
+            }
         }
         response()->redirect('/register');
         // dump($model->attributes);
