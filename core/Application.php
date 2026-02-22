@@ -11,7 +11,9 @@ class Application
     public Response $response;
     public Router $router;
     public View $view;
+    public Database $db;
     public Session $session;
+
     public static Application $app;
 
     public function __construct()
@@ -25,7 +27,8 @@ class Application
         $this->view = new View(LAYOUT);
         $this->session = new Session();
         $this->generateCsrfToken();
-        $this->setDbConnection();
+        // $this->setDbConnection();
+        $this->db = new Database();
     }
 
     public function run(): void

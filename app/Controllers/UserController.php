@@ -9,23 +9,49 @@ class UserController extends BaseController
 {
     public function register()
     {
-        // dump(Capsule::insert("insert into users (name, email, password) values (?, ?, ?)", 
-        // ['Ivab', 'ivan@mail.ru', 123]));
+        // Capsule::enableQueryLog();
+        // $user = User::query()->with('phones')->find(3);
+        // dump(Capsule::getQueryLog());
 
-        $users = Capsule::table('users')->select(['id', 'name'])->get();
+        // $users = db()->query('select * from users where id > ?', [5])->get();
         // dump($users);
 
-        // $users = Capsule::select('select * from users where id = ?', [2]);
+        // $users = db()->query('select * from users where id > ?', [5])->getAssoc();
         // dump($users);
-        
-        $users2 = User::all();
-        foreach ($users2 as $user) {
-            echo "$user->name, ";
+
+        // $user = db()->query('select * from users where id = ?', [3])->getOne();
+        // dump($user);
+
+        // dump(db()->query('select count(*) from users')->getColumn());
+
+        // $users = db()->findAll('users');
+        // dump($users);
+
+        // $user = db()->findOne('users', 'Ivab', 'name');
+        // dump($user);
+
+        // $user = db()->findOrFail('users', 'vab', 'name');
+        // dump($user);
+
+        // db()->query('insert into phones (user_id, phone) values(?, ?)', [8, 5111]);
+        // dump(db()->getInsertId());
+
+        // db()->query('delete from phones where id > ?', [5]);
+        // dump(db()->rowCount());
+
+        try {
+            db()->beginTransaction();
+            db()->query('insert into phones (user_id, phone) values (?,?)', [22, 221111]);
+            db()->query('insert into users (name, email, password) values (?,?,?)', 
+                        ['User 22', 'user22@mail.com', 123]);         
+            db()->commit();
+        } catch (\Exception $e) {
+            db()->rollBack();
+            dump($e);
         }
 
         return view('user/register', [
             'title' => 'Register page',
-            'users' =>  $users,
         ]);
     }
 
