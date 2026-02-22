@@ -3,52 +3,21 @@
 namespace App\Controllers;
 
 use App\Models\User;
-use Illuminate\Database\Capsule\Manager as Capsule;
 
 class UserController extends BaseController
 {
     public function register()
     {
-        // Capsule::enableQueryLog();
-        // $user = User::query()->with('phones')->find(3);
-        // dump(Capsule::getQueryLog());
-
-        // $users = db()->query('select * from users where id > ?', [5])->get();
-        // dump($users);
-
-        // $users = db()->query('select * from users where id > ?', [5])->getAssoc();
-        // dump($users);
-
-        // $user = db()->query('select * from users where id = ?', [3])->getOne();
-        // dump($user);
-
-        // dump(db()->query('select count(*) from users')->getColumn());
-
-        // $users = db()->findAll('users');
-        // dump($users);
-
-        // $user = db()->findOne('users', 'Ivab', 'name');
-        // dump($user);
-
-        // $user = db()->findOrFail('users', 'vab', 'name');
-        // dump($user);
-
-        // db()->query('insert into phones (user_id, phone) values(?, ?)', [8, 5111]);
-        // dump(db()->getInsertId());
-
-        // db()->query('delete from phones where id > ?', [5]);
-        // dump(db()->rowCount());
-
-        try {
-            db()->beginTransaction();
+        // try {
+        //     db()->beginTransaction();
             db()->query('insert into phones (user_id, phone) values (?,?)', [22, 221111]);
-            db()->query('insert into users (name, email, password) values (?,?,?)', 
-                        ['User 22', 'user22@mail.com', 123]);         
-            db()->commit();
-        } catch (\Exception $e) {
-            db()->rollBack();
-            dump($e);
-        }
+        //     db()->query('insert into users (name, email, password) values (?,?,?)', 
+        //                 ['User 22', 'user22@mail.com', 123]);         
+        //     db()->commit();
+        // } catch (\Exception $e) {
+        //     db()->rollBack();
+        //     dump($e);
+        // }
 
         return view('user/register', [
             'title' => 'Register page',
@@ -64,23 +33,14 @@ class UserController extends BaseController
             session()->set('form_errors', $model->getErrors());
             session()->set('form_data', $model->attributes);
         } else {
-            // User::query()->create([
-            //     'name' => $model->attributes['name'],
-            //     'email' => $model->attributes['email'],
-            //     'password' => $model->attributes['password']
-            // ]);
-            // unset($model->attributes['confirmPassword']);
-            if ($model->save()) {
-                session()->setFlash('success', 'Thanks for registration');
+            $model->attributes['password'] = password_hash($model->attributes['password'], PASSWORD_DEFAULT);
+            if ($id = $model->save()) {
+                session()->setFlash('success', 'Thanks for registration. Your ID: ' . $id);
             } else {
                 session()->setFlash('error', 'Error registration');
             }
         }
         response()->redirect('/register');
-        // dump($model->attributes);
-        // dump($model->validate());
-        // dump($model->getErrors());
-        // dd($_POST);
     }
 
     public function login()

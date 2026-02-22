@@ -43,11 +43,11 @@ class Application
         }
     }
 
-    public function setDbConnection()
-    {
-        $capsule = new Capsule;
-        $capsule->addConnection(DB_SETTINGS);
-        $capsule->setAsGlobal();
-        $capsule->bootEloquent();
-    }
+    // public function setDbConnection()
+    // {
+    //     $capsule = new Capsule;
+    //     $capsule->addConnection(DB_SETTINGS);
+    //     $capsule->setAsGlobal();
+    //     $capsule->bootEloquent();
+    // }
 }
