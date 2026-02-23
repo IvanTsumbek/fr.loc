@@ -10,7 +10,7 @@ class UserController extends BaseController
     {
         // try {
         //     db()->beginTransaction();
-            db()->query('insert into phones (user_id, phone) values (?,?)', [22, 221111]);
+            // db()->query('insert into phones (user_id, phone) values (?,?)', [22, 221111]);
         //     db()->query('insert into users (name, email, password) values (?,?,?)', 
         //                 ['User 22', 'user22@mail.com', 123]);         
         //     db()->commit();

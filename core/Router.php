@@ -4,17 +4,9 @@ namespace PHPFramework;
 
 class Router
 {
-    // protected Request $request;
-    // protected Response $response;
 
     protected array $routes = [];
     protected array $route_params = [];
-
-    // public function __construct(Request $request, Response $response)
-    // {
-    //     $this->request = $request;
-    //     $this->response = $response;
-    // }
 
     public function __construct(
         protected Request $request,
@@ -33,7 +25,7 @@ class Router
         $this->routes[] = [
             'path' => "/$path",
             'callback' => $callback,
-            'middleware' => null,
+            'middleware' => [],
             'method' => $method,
             'needCsrfToken' => true,
         ];
@@ -66,7 +58,7 @@ class Router
         if (is_array($route['callback'])) {
             $route['callback'][0] = new $route['callback'][0];
         }
-       
+
         return call_user_func($route['callback']);
     }
 
@@ -77,7 +69,7 @@ class Router
                 preg_match("#^{$route['path']}$#", "/{$path}", $matches) &&
                 in_array($this->request->getMethod(), $route['method'])
             ) {
-                if(request()->isPost()) {
+                if (request()->isPost()) {
                     if ($route['needCsrfToken'] && !$this->checkCsrfToken()) {
                         if (request()->isAjax()) {
                             echo json_encode([
@@ -86,13 +78,20 @@ class Router
                             ]);
                             die;
                         } else {
-                            // session()->setFlash('error', 'Ошибка безопасности');
-                            // response()->redirect();
                             abort('Page expired', 419);
                         }
                     }
                 }
-                // dump(__FILE__ . __LINE__, $matches);
+
+                if ($route['middleware']) {
+                    foreach ($route['middleware'] as $item) {
+                        $middleware = MIDDLEWARE[$item] ?? false;
+                        if ($middleware) {
+                            (new $middleware)->handle();
+                        }
+                    }
+                }
+
                 foreach ($matches as $k => $v) {
                     if (is_string($k)) {
                         $this->route_params[$k] = $v;
@@ -112,7 +111,13 @@ class Router
 
     public function checkCsrfToken(): bool
     {
-        return request()->post('csrf_token') && 
-        (request()->post('csrf_token')) === session()->get('csrf_token');
+        return request()->post('csrf_token') &&
+            (request()->post('csrf_token')) === session()->get('csrf_token');
+    }
+
+    public function middleware(array $middleware): self
+    {
+        $this->routes[array_key_last($this->routes)]['middleware'] = $middleware;
+        return $this;
     }
 }

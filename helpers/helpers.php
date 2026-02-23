@@ -100,3 +100,8 @@ function get_csrf_meta(): string
 {
     return '<meta name="csrf-token" content="' . session()->get('csrf_token') . '">';
 }
+
+function check_auth()
+{
+    return false;
+}
