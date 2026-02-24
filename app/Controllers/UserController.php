@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use PHPFramework\Pagination;
 
 class UserController extends BaseController
 {
@@ -47,6 +48,19 @@ class UserController extends BaseController
     {
         return view('user/login', [
             'title' => 'Login page',
+        ]);
+    }
+
+    public function index()
+    {
+        $pagination = new Pagination(3, 20, 2);
+        dump($pagination);
+        dump($pagination->getOffset());
+
+        $users = db()->findAll('users');
+        return view('user/index', [
+            'title' => 'User',
+            'users' => $users,
         ]);
     }
 }
