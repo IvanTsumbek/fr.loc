@@ -9,14 +9,6 @@
             </li>
         <?php endif; ?>
 
-        <?php if (!empty($back)): ?>
-            <li class="page-item">
-                <a class="page-link" href="<?= $back ?>" aria-label="Previos page">
-                    <span aria-hidden="true">&lt;</span>
-                </a>
-            </li>
-        <?php endif; ?>
-
         <?php if (!empty($pages_left)): ?>
             <?php foreach ($pages_left as $page_left): ?>
                 <li class="page-item">
@@ -38,15 +30,6 @@
                     </a>
                 </li>
             <?php endforeach; ?>
-        <?php endif; ?>
-
-
-        <?php if (!empty($forward)): ?>
-            <li class="page-item">
-                <a class="page-link" href="<?= $forward ?>" aria-label="Next page">
-                    <span aria-hidden="true">&gt;</span>
-                </a>
-            </li>
         <?php endif; ?>
 
         <?php if (!empty($last_page)): ?>
