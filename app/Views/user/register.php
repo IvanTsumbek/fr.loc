@@ -2,6 +2,8 @@
 
   <h1><?= $title ?? '' ?></h1>
 
+  <?= app()->get('menu'); ?>
+
   <div class="row">
 
     <div class="col-md-6 offset-md-3">
