@@ -11,7 +11,7 @@ class UserController extends BaseController
     {
         // try {
         //     db()->beginTransaction();
-            // db()->query('insert into phones (user_id, phone) values (?,?)', [22, 221111]);
+        // db()->query('insert into phones (user_id, phone) values (?,?)', [22, 221111]);
         //     db()->query('insert into users (name, email, password) values (?,?,?)', 
         //                 ['User 22', 'user22@mail.com', 123]);         
         //     db()->commit();
@@ -29,6 +29,15 @@ class UserController extends BaseController
     {
         $model = new User();
         $model->loadData();
+
+        if (request()->isAjax()) {
+            echo json_encode([
+                'status' => 'success',
+                'data' => 'Thanks for registration'
+            ]);
+            die;
+        }
+
         if (!$model->validate()) {
             session()->setFlash('error', 'Validation errors');
             session()->set('form_errors', $model->getErrors());
@@ -48,6 +57,16 @@ class UserController extends BaseController
     {
         return view('user/login', [
             'title' => 'Login page',
+            'styles' => [
+                base_url('/assets/css/test.css'),
+            ],
+            'header_scripts' => [
+                base_url('/assets/js/test.js'),
+                base_url('/assets/js/test2.js'),
+            ],
+            'footer_scripts' => [
+                base_url('/assets/js/test3.js'),
+            ]
         ]);
     }
 
@@ -56,13 +75,13 @@ class UserController extends BaseController
         // if ($page = cache()->get(request()->rawUri)) {
         //     return $page;
         // }
-        
+
         $users_cnt = db()->query('select count(*) from users')->getColumn();
         $limit = PAGINATION_SETTINGS['per_page'];
         $pagination = new Pagination($users_cnt);
 
         $users = db()->query("select * from users limit $limit offset {$pagination->getOffset()}")->get();
-       
+
         // $page = view('user/index', [
         //     'title' => 'User',
         //     'users' => $users,
