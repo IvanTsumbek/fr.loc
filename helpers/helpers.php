@@ -5,7 +5,7 @@ function app(): \PHPFramework\Application
     return \PHPFramework\Application::$app;
 }
 
-function request():\PHPFramework\Request
+function request(): \PHPFramework\Request
 {
     return app()->request;
 }
@@ -25,12 +25,27 @@ function cache(): \PHPFramework\Cache
     return app()->cache;
 }
 
+function get_route_param($key, $default = ''): string
+{
+    return app()->router->route_params[$key] ?? $default;
+}
+
+function array_value_search($arr, $index, $value): int|string|null
+{
+    foreach ($arr as $k => $v) {
+        if ($v[$index] == $value) {
+            return $k;
+        }
+    }
+    return null;
+}
+
 function db(): \PHPFramework\Database
 {
     return app()->db;
 }
 
-function view ($view = '', $data = [], $layout = ''): string|\PHPFramework\View
+function view($view = '', $data = [], $layout = ''): string|\PHPFramework\View
 {
     if ($view) {
         return app()->view->render($view, $data, $layout);
@@ -52,10 +67,12 @@ function base_url($path = ''): string
 
 function get_alerts(): void
 {
-    if(!empty($_SESSION['flash'])) {
-        foreach($_SESSION['flash'] as $k => $v) {
-            echo view()->renderPartial("incs/alert_{$k}", 
-            ["flash_{$k}" => session()->getFlash($k)]);
+    if (!empty($_SESSION['flash'])) {
+        foreach ($_SESSION['flash'] as $k => $v) {
+            echo view()->renderPartial(
+                "incs/alert_{$k}",
+                ["flash_{$k}" => session()->getFlash($k)]
+            );
         }
     }
 }
@@ -66,7 +83,7 @@ function get_errors($fieldname): string
     $errors = session()->get('form_errors');
     if (isset($errors[$fieldname])) {
         $output .= '<div class="invalid-feedback d-block"><ul class="list-unstyled">';
-        foreach($errors[$fieldname] as $error) {
+        foreach ($errors[$fieldname] as $error) {
             $output .= "<li>$error</li>";
         }
         $output .= '</ul></div>';
@@ -77,7 +94,7 @@ function get_errors($fieldname): string
 function get_validation_class($fieldname): string
 {
     $errors = session()->get('form_errors');
-    if(empty($errors)) {
+    if (empty($errors)) {
         return '';
     }
     return isset($errors[$fieldname]) ? 'is-invalid' : 'is-valid';
@@ -86,8 +103,8 @@ function get_validation_class($fieldname): string
 function old($fieldname): string
 {
     return isset(session()->get('form_data')[$fieldname]) ?
-               h(session()->get('form_data')[$fieldname]) :
-                '';
+        h(session()->get('form_data')[$fieldname]) :
+        '';
 }
 
 function h($str): string

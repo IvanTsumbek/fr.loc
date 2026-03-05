@@ -34,3 +34,26 @@ const PAGINATION_SETTINGS = [
     'max_pages' => 7,
     'tpl' => 'pagination/base2',
 ];
+
+const MULTILANGS = 1;
+
+const LANGS = [
+    'ru' => [
+        'id' => 1,
+        'code' => 'ru',
+        'title' => 'Русский',
+        'base' => 1,
+    ],
+    'en' => [
+        'id' => 2,
+        'code' => 'en',
+        'title' => 'English',
+        'base' => 0,
+    ],
+    'fr' => [
+        'id' => 3,
+        'code' => 'fr',
+        'title' => 'France',
+        'base' => 0,
+    ],
+];

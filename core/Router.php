@@ -6,7 +6,7 @@ class Router
 {
 
     protected array $routes = [];
-    protected array $route_params = [];
+    public array $route_params = [];
 
     public function __construct(
         protected Request $request,
@@ -65,10 +65,30 @@ class Router
     protected function matchRoute($path): mixed
     {
         foreach ($this->routes as $route) {
+            if (MULTILANGS) {
+                $pattern = "#^/?(?P<lang>[a-z]+)?{$route['path']}?$#";
+            } else {
+                $pattern = "#^{$route['path']}$#";
+            }
             if (
-                preg_match("#^{$route['path']}$#", "/{$path}", $matches) &&
+                preg_match($pattern, "/{$path}", $matches) &&
                 in_array($this->request->getMethod(), $route['method'])
             ) {
+                foreach ($matches as $k => $v) {
+                    if (is_string($k)) {
+                        $this->route_params[$k] = $v;
+                    }
+                }
+
+                $lang = trim(get_route_param('lang'), '/');
+                $base_lang = array_value_search(LANGS, 'base', 1);
+                if (($lang && !array_key_exists($lang, LANGS)) || $lang == $base_lang) {
+                    abort();
+                }
+
+                $lang = $lang ?: $base_lang; 
+                app()->set('lang', LANGS[$lang]);
+
                 if (request()->isPost()) {
                     if ($route['needCsrfToken'] && !$this->checkCsrfToken()) {
                         if (request()->isAjax()) {
@@ -92,11 +112,6 @@ class Router
                     }
                 }
 
-                foreach ($matches as $k => $v) {
-                    if (is_string($k)) {
-                        $this->route_params[$k] = $v;
-                    }
-                }
                 return $route;
             }
         }
