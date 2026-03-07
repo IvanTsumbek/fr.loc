@@ -2,10 +2,11 @@
 
 /** @var  \PHPFramework\Application $app */
 
+use App\Controllers\HomeController;
+use App\Controllers\PostController;
+use App\Controllers\UserController;
 use PHPFramework\Middleware\Auth;
 use PHPFramework\Middleware\Guest;
-use App\Controllers\HomeController;
-use App\Controllers\UserController;
 
 const MIDDLEWARE = [
     'auth' => Auth::class,
@@ -18,6 +19,7 @@ $app->router->get('/register', [UserController::class, 'register'])->middleware(
 $app->router->post('/register', [UserController::class, 'store'])->middleware(['guest']);
 $app->router->get('/login', [UserController::class, 'login'])->middleware(['guest']);
 $app->router->get('/users', [UserController::class, 'index']);
+$app->router->get('/posts', [PostController::class, 'index']);
 
 $app->router->get('/post/(?P<slug>[a-z0-9-]+)', function () {
     return 'Post ' . get_route_param('slug', 'test');
