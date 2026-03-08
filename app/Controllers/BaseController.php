@@ -10,7 +10,7 @@ class BaseController extends Controller
     {
         // app()->set('menu', $this->renderMenu());
         if (!$menu = cache()->get('menu')) {
-            cache()->set('menu', $this->renderMenu(), 2);
+            cache()->set('menu', $this->renderMenu(), 1);
         }
     }
 

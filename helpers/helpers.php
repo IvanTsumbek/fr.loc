@@ -147,3 +147,13 @@ function check_auth()
 {
     return false;
 }
+
+function _e($key): void
+{
+    echo \PHPFramework\Language::get($key);
+}
+
+function __($key): string
+{
+    return \PHPFramework\Language::get($key);
+}
