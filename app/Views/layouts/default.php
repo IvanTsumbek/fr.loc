@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="<?= base_url('/assets/bootstrap/css/bootstrap.min.css'); ?>">
     <link rel="stylesheet" href="<?= base_url('/assets/iziModal/css/iziModal.min.css'); ?>">
 
-    <?php if (!empty($styles)): ?>
+    <?php
+    if (!empty($styles)): ?>
         <?php foreach ($styles as $style): ?>
             <link rel="stylesheet" href="<?= $style ?>">
         <?php endforeach ?>
@@ -39,6 +40,18 @@
                 <?= cache()->get('menu'); ?>
 
                 <ul class="navbar-nav">
+                    <?php if (check_auth()): ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Hello, <?= get_user()['name']; ?>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" 
+                                href="<?= base_href('/logout'); ?>">Logout</a></li>
+                            </ul>
+                        </li>
+                    <?php endif; ?>
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <?= app()->get('lang')['title']; ?>

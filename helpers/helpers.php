@@ -1,5 +1,7 @@
 <?php
 
+use PHPFramework\Middleware\Auth;
+
 function app(): \PHPFramework\Application
 {
     return \PHPFramework\Application::$app;
@@ -143,9 +145,19 @@ function get_csrf_meta(): string
     return '<meta name="csrf-token" content="' . session()->get('csrf_token') . '">';
 }
 
-function check_auth()
+function check_auth(): bool
 {
-    return false;
+   return \PHPFramework\Auth::isAuth();
+}
+
+function get_user()
+{
+    return \PHPFramework\Auth::user();
+}
+
+function logout(): void
+{
+    \PHPFramework\Auth::logout();
 }
 
 function _e($key): void

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use PHPFramework\Auth;
 use PHPFramework\Pagination;
 
 class UserController extends BaseController
@@ -41,8 +42,11 @@ class UserController extends BaseController
 
             $model->attributes['password'] = password_hash($model->attributes['password'], PASSWORD_DEFAULT);
             if ($id = $model->save()) {
-                echo json_encode(['status' => 'success', 'data' => sprintf(__('user_store_success'), $id),
-            'redirect' => base_href('/login')]);
+                echo json_encode([
+                    'status' => 'success',
+                    'data' => sprintf(__('user_store_success'), $id),
+                    'redirect' => base_href('/login')
+                ]);
             } else {
                 echo json_encode(['status' => 'error', 'data' => 'Error registration']);
             }
@@ -66,19 +70,40 @@ class UserController extends BaseController
 
     public function login()
     {
-        return view('user/login', [
-            'title' => 'Login page',
-            'styles' => [
-                base_url('/assets/css/test.css'),
-            ],
-            'header_scripts' => [
-                base_url('/assets/js/test.js'),
-                base_url('/assets/js/test2.js'),
-            ],
-            'footer_scripts' => [
-                base_url('/assets/js/test3.js'),
-            ]
-        ]);
+        return view('user/login', ['title' => 'Login page']);
+    }
+
+    public function auth()
+    {
+        $model = new User();
+        $model->loadData();
+
+        if (!$model->validate($model->attributes, [
+            'required' => ['email', 'password']
+        ])) {
+            echo json_encode(['status' => 'error', 'data' => $model->listErrors()]);
+            die;
+        }
+
+        if (Auth::login([
+            'email' => $model->attributes['email'],
+            'password' => $model->attributes['password']
+        ])) {
+            echo json_encode([
+                'status' => 'success',
+                'data' => 'Success login',
+                'redirect' => base_href('/dashboard')
+            ]);
+        } else {
+            echo json_encode(['status' => 'error', 'data' => 'Wrong email or password']);
+        }
+        die;
+    }
+
+    public function logout()
+    {
+        logout();
+        response()->redirect(base_href('/login'));
     }
 
     public function index()
