@@ -61,19 +61,22 @@ class Database
     public function findAll($tbl): array | false
     {
         $this->query("select * from {$tbl}");
-        return $this->stmt->fetchAll(); 
+        return $this->stmt->fetchAll();
     }
 
     public function findOne($tbl, $value, $key = 'id')
     {
         $this->query("select * from {$tbl} where {$key} = ? LIMIT 1", [$value]);
-        return $this->stmt->fetch(); 
+        return $this->stmt->fetch();
     }
 
     public function findOrFail($tbl, $value, $key = 'id')
     {
         $res = $this->findOne($tbl, $value, $key);
-        if(!$res) {
+        if (!$res) {
+            if ($_SERVER['HTTP_ACCEPT'] == 'application/json') {
+                response()->json(['status' => 'error', 'answer' => 'Not found'], 404);
+            }
             abort();
         }
         return $res;

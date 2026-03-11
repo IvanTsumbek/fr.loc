@@ -43,6 +43,11 @@ class Router
         return $this->add($path, $callback, 'POST');
     }
 
+    public function put($path, $callback): self
+    {
+        return $this->add($path, $callback, 'PUT');
+    }
+
     public function getRoutes(): array
     {
         return $this->routes;
@@ -71,9 +76,15 @@ class Router
                 $pattern = "#^{$route['path']}$#";
             }
             if (
-                preg_match($pattern, "/{$path}", $matches) &&
-                in_array($this->request->getMethod(), $route['method'])
+                preg_match($pattern, "/{$path}", $matches)
             ) {
+                if (!in_array($this->request->getMethod(), $route['method'])) {
+                    if($_SERVER['HTTP_ACCEPT'] == 'application/json') {
+                        response()->json(['status' => 'error', 'answer' => 'Method not allowed'], 405);
+                    }
+                    abort('Method Not Allowed', 405);
+                }
+
                 foreach ($matches as $k => $v) {
                     if (is_string($k)) {
                         $this->route_params[$k] = $v;
@@ -86,7 +97,7 @@ class Router
                     abort();
                 }
 
-                $lang = $lang ?: $base_lang; 
+                $lang = $lang ?: $base_lang;
                 app()->set('lang', LANGS[$lang]);
 
                 Language::load($route['callback']);

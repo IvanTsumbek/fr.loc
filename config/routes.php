@@ -2,6 +2,7 @@
 
 /** @var  \PHPFramework\Application $app */
 
+use App\Controllers\Api\V1\CategoryController;
 use App\Controllers\ContactController;
 use App\Controllers\HomeController;
 use App\Controllers\PostController;
@@ -14,6 +15,8 @@ const MIDDLEWARE = [
     'guest' => Guest::class,
 ];
 
+$app->router->get('/api/v1/categories', [CategoryController::class, 'index']);
+$app->router->get('/api/v1/categories/(?P<slug>[a-z0-9-]+)', [CategoryController::class, 'view']);
 
 $app->router->get('/dashboard', [HomeController::class, 'dashboard'])->middleware(['auth']);
 $app->router->get('/register', [UserController::class, 'register'])->middleware(['guest']);
