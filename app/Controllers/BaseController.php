@@ -9,9 +9,9 @@ class BaseController extends Controller
     public function __construct()
     {
         // app()->set('menu', $this->renderMenu());
-        if (!$menu = cache()->get('menu')) {
-            cache()->set('menu', $this->renderMenu(), 1);
-        }
+        // if (!$menu = cache()->get('menu')) {
+        //     cache()->set('menu', $this->renderMenu(), 1);
+        // }
     }
 
     public function renderMenu(): string

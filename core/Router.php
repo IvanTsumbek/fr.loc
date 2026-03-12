@@ -69,6 +69,7 @@ class Router
 
     protected function matchRoute($path): mixed
     {
+        $allowed_methods = [];
         foreach ($this->routes as $route) {
             if (MULTILANGS) {
                 $pattern = "#^/?(?P<lang>[a-z]+)?{$route['path']}?$#";
@@ -79,11 +80,15 @@ class Router
                 preg_match($pattern, "/{$path}", $matches)
             ) {
                 if (!in_array($this->request->getMethod(), $route['method'])) {
-                    if($_SERVER['HTTP_ACCEPT'] == 'application/json') {
-                        response()->json(['status' => 'error', 'answer' => 'Method not allowed'], 405);
-                    }
-                    abort('Method Not Allowed', 405);
+                    $allowed_methods = array_merge($allowed_methods, $route['method']);
+                    continue;
                 }
+                // if (!in_array($this->request->getMethod(), $route['method'])) {
+                //     if($_SERVER['HTTP_ACCEPT'] == 'application/json') {
+                //         response()->json(['status' => 'error', 'answer' => 'Method not allowed'], 405);
+                //     }
+                //     abort('Method Not Allowed', 405);
+                // }
 
                 foreach ($matches as $k => $v) {
                     if (is_string($k)) {
@@ -128,6 +133,14 @@ class Router
                 return $route;
             }
         }
+        if ($allowed_methods) {
+            header("Allow: " . implode(', ', array_unique($allowed_methods)));
+            if ($_SERVER['HTTP_ACCEPT'] == 'application/json') {
+                response()->json(['status' => 'error', 'answer' => 'Method not allowed'], 405);
+            }
+            abort('Method Not Allowed', 405);
+        }
+
         return false;
     }
 

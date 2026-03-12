@@ -15,6 +15,10 @@ const MIDDLEWARE = [
     'guest' => Guest::class,
 ];
 
+$app->router->add('/api/v1/test', function () {
+    response()->json(['status' => 'ok', 'message' => 'Success page']);
+}, ['get', 'post', 'put'])->withoutCsrfToken();
+
 $app->router->get('/api/v1/categories', [CategoryController::class, 'index']);
 $app->router->get('/api/v1/categories/(?P<slug>[a-z0-9-]+)', [CategoryController::class, 'view']);
 

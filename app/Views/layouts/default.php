@@ -36,8 +36,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-                <!-- <?= app()->get('menu'); ?> -->
-                <?= cache()->get('menu'); ?>
+           
+                <?//= cache()->get('menu'); ?>
+                <?php echo view()->renderPartial('incs/menu'); ?>
 
                 <ul class="navbar-nav">
                     <?php if (check_auth()): ?>
