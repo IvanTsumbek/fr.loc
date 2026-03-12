@@ -6,6 +6,7 @@ use App\Controllers\Api\V1\CategoryController;
 use App\Controllers\ContactController;
 use App\Controllers\HomeController;
 use App\Controllers\PostController;
+use App\Controllers\TestController;
 use App\Controllers\UserController;
 use PHPFramework\Middleware\Auth;
 use PHPFramework\Middleware\Guest;
@@ -14,6 +15,9 @@ const MIDDLEWARE = [
     'auth' => Auth::class,
     'guest' => Guest::class,
 ];
+
+$app->router->get('/test', [TestController::class, 'index']);
+$app->router->post('/test', [TestController::class, 'send']);
 
 $app->router->add('/api/v1/test', function () {
     response()->json(['status' => 'ok', 'message' => 'Success page']);
