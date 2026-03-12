@@ -40,6 +40,7 @@ $app->router->get('/post/(?P<slug>[a-z0-9-]+)', function () {
 });
 
 $app->router->get('/contact', [ContactController::class, 'index']);
+$app->router->post('/contact', [ContactController::class, 'send']);
 $app->router->get('/', [HomeController::class, 'index']);
 
 // return dump(__FILE__ . __LINE__, $app->router->getRoutes());

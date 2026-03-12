@@ -13,6 +13,6 @@
 <body>
     <h1>Тестовое письмо</h1>
     <p>Name: <?= $name ?? ''; ?></p>
-    <p>Age: <?= $age ?? ''; ?></p>
+    <p>Message: <?= $message ?? ''; ?></p>
 </body>
 </html>
